@@ -1,0 +1,73 @@
+{
+  "frame_id": {
+    "type": "integer",
+    "description": "Sequential frame index, 0-based. Primary key.",
+    "domain": "0–30",
+    "missing": 0
+  },
+  "lat": {
+    "type": "float",
+    "description": "WGS84 latitude of the frame position in decimal degrees.",
+    "domain": "41.0364–41.0441",
+    "missing": 0
+  },
+  "lon": {
+    "type": "float",
+    "description": "WGS84 longitude of the frame position in decimal degrees.",
+    "domain": "28.9858–28.9906",
+    "missing": 0
+  },
+  "distance_from_start": {
+    "type": "float",
+    "description": "Cumulative distance along the route from frame 0, in metres.",
+    "domain": "0.0–1135.88",
+    "missing": 0
+  },
+  "building_ratio": {
+    "type": "float",
+    "description": "Combined building pixel area as a fraction of total frame area. Derived from semantic segmentation. Range [0, 1].",
+    "domain": "[0, 1]",
+    "missing": 0
+  },
+  "sky_ratio": {
+    "type": "float",
+    "description": "Sky pixel area as a fraction of total frame area. Indicates vertical openness of the urban profile. Range [0, 1].",
+    "domain": "[0, 1]",
+    "missing": 0,
+    "note": "Frame 6 records sky_ratio = 0.000 — the only fully enclosed visual field in the dataset (urban canyon)."
+  },
+  "vegetation_ratio": {
+    "type": "float",
+    "description": "Vegetation pixel area (trees, grass, shrubs) as a fraction of total frame area. Range [0, 1].",
+    "domain": "[0, 1]",
+    "missing": 0
+  },
+  "building_left": {
+    "type": "float",
+    "description": "Building pixel area in the left half of the frame, as a fraction of the full frame area. Used for stereo spatial audio panning (left channel). Range [0, 1].",
+    "domain": "[0, 1]",
+    "missing": 0,
+    "zero_count": 5
+  },
+  "building_right": {
+    "type": "float",
+    "description": "Building pixel area in the right half of the frame, as a fraction of the full frame area. Used for stereo spatial audio panning (right channel). Range [0, 1].",
+    "domain": "[0, 1]",
+    "missing": 0,
+    "zero_count": 3
+  },
+  "person_count": {
+    "type": "integer",
+    "description": "Number of persons detected in the frame via object detection. Normalised to 10 for audio amplitude mapping.",
+    "domain": "0–12",
+    "missing": 0,
+    "zero_count": 14
+  },
+  "vehicle_count": {
+    "type": "integer",
+    "description": "Number of vehicles (cars, buses, motorcycles) detected in the frame. Normalised to 8 for audio amplitude mapping.",
+    "domain": "0–12",
+    "missing": 0,
+    "zero_count": 8
+  }
+}
