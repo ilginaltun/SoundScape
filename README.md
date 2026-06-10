@@ -90,12 +90,12 @@ Beyond literal zeros, the dataset carries **structural under-coding** worth stat
 
 **Plots**
 
-![Spatial distribution](main/spatial_distribution.png)
-![Channel distributions along route](main/channel_distribution.png)
-![Zone strip](main/zone_strip.png)
-![Ratio fields box plot](main/ratio_boxplot.png)
-![Agent count histograms](main/count_histograms.png)
-![Correlation matrix](main/correlation_matrix.png)
+![Spatial distribution](spatial_distribution.png)
+![Channel distributions along route](channel_distribution.png)
+![Zone strip](zone_strip.png)
+![Ratio fields box plot](ratio_boxplot.png)
+![Agent count histograms](count_histograms.png)
+![Correlation matrix](correlation_matrix.png)
 
 **Morphological character by zone**
 
