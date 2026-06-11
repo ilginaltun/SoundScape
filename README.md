@@ -71,6 +71,15 @@ More specifically:
 
 ---
 
+**Plots**
+
+![Spatial distribution](spatial_distribution.png)
+![Channel distributions along route](channel_distribution.png)
+![Zone strip](zone_strip.png)
+![Ratio fields box plot](ratio_boxplot.png)
+![Agent count histograms](count_histograms.png)
+![Correlation matrix](correlation_matrix.png)
+
 ## Application & Design Rationale
 
 **Single-file HTML application** with:
