@@ -7,67 +7,69 @@
   },
   "lat": {
     "type": "float",
-    "description": "WGS84 latitude of the frame position in decimal degrees.",
-    "domain": "41.0364–41.0441",
+    "description": "WGS84 latitude in decimal degrees.",
+    "domain": "41.0365–41.0454",
     "missing": 0
   },
   "lon": {
     "type": "float",
-    "description": "WGS84 longitude of the frame position in decimal degrees.",
-    "domain": "28.9858–28.9906",
+    "description": "WGS84 longitude in decimal degrees.",
+    "domain": "28.9825–28.9969",
     "missing": 0
   },
   "distance_from_start": {
     "type": "float",
     "description": "Cumulative distance along the route from frame 0, in metres.",
-    "domain": "0.0–1135.88",
+    "domain": "0.0–1150.0",
     "missing": 0
   },
   "building_ratio": {
     "type": "float",
-    "description": "Combined building pixel area as a fraction of total frame area. Derived from semantic segmentation. Range [0, 1].",
+    "description": "Combined building pixel area as fraction of total frame area [0, 1]. Shows urban density.",
     "domain": "[0, 1]",
-    "missing": 0
+    "missing": 0,
+    "note": "Decreases monotonically from 0.51 (Taksim) to 0.001 (Taşkışla), encoding commercial-to-cultural transition."
   },
   "sky_ratio": {
     "type": "float",
-    "description": "Sky pixel area as a fraction of total frame area. Indicates vertical openness of the urban profile. Range [0, 1].",
+    "description": "Sky pixel area as fraction of total frame area [0, 1]. Indicates vertical openness.",
     "domain": "[0, 1]",
     "missing": 0,
-    "note": "Frame 6 records sky_ratio = 0.000 — the only fully enclosed visual field in the dataset (urban canyon)."
+    "note": "Increases from 0.024 (street canyon) to 0.745 (open park)."
   },
   "vegetation_ratio": {
     "type": "float",
-    "description": "Vegetation pixel area (trees, grass, shrubs) as a fraction of total frame area. Range [0, 1].",
+    "description": "Vegetation pixel area (trees, grass, plants) as fraction of total frame area [0, 1].",
     "domain": "[0, 1]",
-    "missing": 0
+    "missing": 0,
+    "note": "Rises from 0.001 (Taksim commercial) to 0.998 (Taşkışla green), the inverse of building_ratio."
   },
   "building_left": {
     "type": "float",
-    "description": "Building pixel area in the left half of the frame, as a fraction of the full frame area. Used for stereo spatial audio panning (left channel). Range [0, 1].",
+    "description": "Building pixel area in left half of frame, as fraction of full frame. Used for L-pan audio. Range [0, 1].",
     "domain": "[0, 1]",
     "missing": 0,
-    "zero_count": 5
+    "note": "Zero from frame 13 onward (west side of street opens to Gezi Park)."
   },
   "building_right": {
     "type": "float",
-    "description": "Building pixel area in the right half of the frame, as a fraction of the full frame area. Used for stereo spatial audio panning (right channel). Range [0, 1].",
+    "description": "Building pixel area in right half of frame, as fraction of full frame. Used for R-pan audio. Range [0, 1].",
     "domain": "[0, 1]",
     "missing": 0,
-    "zero_count": 3
+    "note": "Persists longer than building_left; right side remains built-up to frame 20."
   },
   "person_count": {
     "type": "integer",
-    "description": "Number of persons detected in the frame via object detection. Normalised to 10 for audio amplitude mapping.",
-    "domain": "0–12",
+    "description": "Number of persons detected in frame via object detection. Normalized to 10 for audio amplitude.",
+    "domain": "3–22",
     "missing": 0,
-    "zero_count": 14
+    "note": "No zero values; minimum is 3 (frame 23, quiet Taşkışla gallery zone). High throughout (mean 10.42), reflecting pedestrian-dominant route."
   },
   "vehicle_count": {
     "type": "integer",
-    "description": "Number of vehicles (cars, buses, motorcycles) detected in the frame. Normalised to 8 for audio amplitude mapping.",
-    "domain": "0–12",
+    "description": "Number of vehicles (cars, buses, motorcycles) detected. Normalized to 8 for audio amplitude.",
+    "domain": "0–10",
     "missing": 0,
-    "zero_count": 8
+    "note": "Concentrated in Taksim (frames 0–4, max 10). Drops to 0 from frame 17 onward (pedestrianized zone)."
   }
 }

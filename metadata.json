@@ -1,27 +1,38 @@
 {
-  "title": "SoundScape — Urban Sound Architecture of the Kadıköy–Moda Coastline",
+  "title": "SoundScape — Urban Sound Architecture of Central Istanbul",
   "author": "ılgın altun",
   "course": "ITU MBL549E Special Topics in Architectural Design Computing, 2026",
-  "research_question": "How can the spatial and sensory qualities of an urban coastal walk be encoded as sound — and what does the city sound like when its visual morphology becomes the score?",
-  "scope": {
-    "neighbourhood": "Kadıköy–Moda coastline, İstanbul",
-    "route_length_m": 1135.88,
-    "frames": 31,
-    "polyline_points": 62,
-    "crs": "WGS84 (EPSG:4326)",
-    "bounding_box": {
-      "lat_min": 41.03639629723353,
-      "lat_max": 41.044087,
-      "lon_min": 28.985777,
-      "lon_max": 28.990632
+  "research_question": "How does urban density gradients—from commercial bustle to cultural quietude—manifest as sound across İstanbul's central corridors?",
+  "routes": [
+    {
+      "name": "Kadıköy–Moda Coastline",
+      "distance_km": 1.14,
+      "frames": 31,
+      "start": "Kadıköy commercial waterfront",
+      "end": "Moda coastal park",
+      "character": "Coastal transition, nature-dominant",
+      "key_feature": "Dramatic shift from built to green"
+    },
+    {
+      "name": "Taksim–Taşkışla Central Corridor",
+      "distance_km": 1.15,
+      "frames": 31,
+      "start": "Taksim (commercial/transportation hub)",
+      "end": "Taşkışla (cultural/gallery district)",
+      "character": "Urban transition, human-activity-dominant",
+      "key_feature": "High pedestrian presence persists; vehicles vanish"
     }
+  ],
+  "scope": {
+    "city": "Istanbul, Turkey",
+    "crs": "WGS84 (EPSG:4326)",
+    "capture_period": "2025–2026"
   },
   "data_collection": {
     "imagery_source": "OpenStreetMap street-level panoramic imagery",
-    "segmentation_method": "Semantic pixel segmentation (building, sky, vegetation classes)",
+    "segmentation_method": "Semantic pixel segmentation (building, sky, vegetation)",
     "agent_detection": "Object detection pipeline (persons, vehicles)",
     "spatial_split": "Left/right building ratio computed by halving the frame horizontally",
-    "capture_period": "2025–2026",
     "manual_correction_pct": "~45% of agent counts reviewed manually"
   },
   "application": {
@@ -30,8 +41,7 @@
       "CSS3",
       "JavaScript (ES2020)",
       "Web Audio API",
-      "Leaflet.js 1.9.4",
-      "OpenStreetMap tiles"
+      "Leaflet.js 1.9.4"
     ],
     "draw_mode_apis": [
       "OSRM (routing)",
@@ -50,9 +60,9 @@
     "dataset.pkl": "Cleaned dataset as pandas DataFrame (31 rows × 11 columns)",
     "dataset.csv": "Same dataset in CSV format for convenience",
     "dataDictionary.json": "Per-column definitions, types, domains, and notes",
-    "metadata.json": "Dataset provenance, scope, method, and application details",
+    "metadata.json": "Dataset provenance, scope, method, and application details (this file)",
     "requirements.txt": "Python dependencies for reproduction",
-    "README.md": "Full project documentation including all analysis results",
-    "plots/": "Distribution and spatial plots referenced in README"
+    "README_TAKSIM_TASKISLA.md": "Full project documentation for Taksim–Taşkışla route",
+    "soundscape.html": "Single-file interactive application (embeds both routes)"
   }
 }
