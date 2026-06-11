@@ -160,7 +160,7 @@ dataDictionary.json    Per-column definitions, types, domains
 metadata.json          Provenance, scope, method, application
 requirements.txt       Python dependencies
 soundscape.html        Single-file interactive application
-README_TAKSIM_TASKISLA.md  This file (Taksim–Taşkışla route)
+README.md  This file (Taksim–Taşkışla route)
 plots/
   spatial_distribution.png
   channel_distribution.png
