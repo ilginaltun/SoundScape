@@ -5,15 +5,6 @@
   "research_question": "Can spatial morphology be perceived and understood through sound without visual reference? What acoustic narratives emerge when six-dimensional urban morphological data is mapped to generative synthesis? What does sonification reveal about spatial transformation that visualization obscures—and what does it lose?",
   "routes": [
     {
-      "name": "Kadıköy–Moda Coastline",
-      "distance_km": 1.14,
-      "frames": 31,
-      "start": "Kadıköy commercial waterfront",
-      "end": "Moda coastal park",
-      "character": "Coastal transition, nature-dominant",
-      "key_feature": "Dramatic shift from built to green"
-    },
-    {
       "name": "Taksim–Taşkışla Central Corridor",
       "distance_km": 1.15,
       "frames": 31,
