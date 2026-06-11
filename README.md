@@ -1,207 +1,175 @@
-# SoundScape — Urban Sound Architecture of the Taksim–Taşkışla Route
+# SoundScape — Translating Urban Morphology into Generative Audio
 
-An environmental sonification archive along a **~1.15 km pedestrian route** in central İstanbul, from Taksim (the city's commercial and cultural epicenter) through the historic transition zone to Taşkışla (the galleries and artistic quarters). The project captures six urban morphology channels per frame and translates them into real-time generative audio. The route records a dramatic shift: from the dense, traffic-heavy commercial core of Taksim to the greening, quieter cultural precinct of Taşkışla.
+An environmental sonification study exploring how **spatial data from urban environments can be encoded as real-time generative sound**, and what acoustic narratives emerge when visual morphology becomes the primary score. The project captures six channels of urban morphological data per geographic frame and maps them directly to synthesis parameters (oscillator frequency, waveform type, pan position, amplitude), asking: can an observer recognize spatial transformation through sound alone?
 
 ---
 
 ## Research Question
 
-> **How does the density gradient of İstanbul's historic center—from commercial bustle to cultural quietude—manifest as sound? Can a single walk encode the city's transition in sonic form?**
+> **Can spatial morphology be perceived and understood through sound without visual reference? What does sonification reveal about urban texture that visualization obscures—and what does it lose?**
+
+More specifically:
+- **Encoding**: How do we map six-dimensional morphological data (building mass, sky openness, vegetation, pedestrian density, vehicle density) to a perceptually coherent and navigable soundscape?
+- **Legibility**: Can a listener track their movement through an urban sequence by ear alone, identifying key moments and zones from the acoustic signature?
+- **Revelation**: What patterns in the data become *audible* through sonification that remain hidden in numerical tables or statistical plots? What spatial truths emerge when we "listen to the city"?
+- **Loss**: What critical information—materiality, phenomenological richness, social dynamics—cannot be captured by morphological measurement and therefore cannot be sonified?
 
 ---
 
-## Dataset
+## Methodology
 
-| | |
-|---|---|
-| Rows (frames) | **31** |
-| Columns | **11** |
-| Primary key | `frame_id` (0–30) |
-| Geographic scope | Taksim → Taşkışla, central İstanbul — ~1.15 km linear route |
-| Route polyline points | **50** (`ROAD_LL` array) |
-| CRS | WGS84 (EPSG:4326) |
-| Capture period | 2025–2026 |
+**Two routes, one sonification engine.** The project applies identical audio synthesis rules to two distinct urban corridors—a coastal transition and an urban commercial-to-cultural gradient—to test whether the sonification reveals universal patterns of spatial transformation or is specific to each site's character.
 
-**Source & method.** Frame data was extracted from street-level panoramic imagery of the Taksim–Taşkışla corridor. A computer vision pipeline performed semantic pixel segmentation (building, sky, vegetation) and object detection (persons, vehicles) for each frame. The six resulting numeric values per frame are mapped to a generative audio synthesis engine built on the **Web Audio API**, using sine, triangle, and sawtooth oscillators, percussive synthesis, stereo panning, and convolution reverb.
+**6-Channel Data → Sound Mapping:**
+- `building_mass` (left/right) → sine oscillator (low frequency, panned) — "pressure"
+- `sky_ratio` → triangle oscillator (high frequency) — "openness"
+- `vegetation_ratio` → triangle oscillator (mid frequency) — "texture"
+- `pedestrian_count` → percussive spikes (temporal density) — "liveliness"
+- `vehicle_count` → sawtooth oscillator (harmonic richness) — "mechanical presence"
 
-The route captures the characteristic pattern of central İstanbul: commercial density at the start, gradual transition to cultural/institutional uses, and open green spaces at the terminus. Unlike the coastal Kadıköy–Moda route, this path emphasizes **human activity and built form** over vegetation and sky.
-
-**Columns:** `frame_id`, `lat`, `lon`, `distance_from_start`, `building_ratio`, `sky_ratio`, `vegetation_ratio`, `building_left`, `building_right`, `person_count`, `vehicle_count`.
+**Playback modes:** (1) Route replay at variable speeds (0.25x–4x), with reverb and layer toggles. (2) Free-draw mode: user draws custom route, OSRM + Overpass API generate morphological data, sonification generates in real-time.
 
 ---
 
-## Data Consistency Check
+## Hypothesis
 
-- **IDs.** All 31 frame IDs are sequential integers from 0 to 30. No gaps, no duplicates.
-- **Coordinates.** All values fall within the expected Taksim–Taşkışla bounding box (lat ≈ 41.0365–41.0454, lon ≈ 28.9825–28.9969). All points lie along the north-south arterial corridor.
-- **Distance monotonicity.** `distance_from_start` increases strictly from 0.0 m (frame 0, Taksim) to 1150.0 m (frame 30, Taşkışla). Inter-frame spacing is regular (~30–40 m).
-- **Value domains.** All ratio fields remain within [0, 1]. `person_count` ranges from 3–22 (high pedestrian activity throughout). `vehicle_count` ranges from 0–10.
-- **Morphological consistency.** `building_ratio` decreases monotonically (0.487 → 0.001) as the route moves from dense urban core to open cultural district. `vegetation_ratio` increases correspondingly (0.001 → 0.998). This linear pattern is a defining feature of the Taksim–Taşkışla transition.
+**H1: Morphological coherence is audible.** A listener hearing two different routes will perceive their distinct character—coastal vs. urban, green vs. built, quiet vs. dense—*solely through sound*.
 
----
+**H2: Transitions are sonically salient.** Key spatial boundaries (park entry, density drop, vehicle vanishing point) produce recognizable acoustic shifts that listeners can identify without visual context.
 
-## Missing Data Analysis
-
-| Column | Zero / effectively missing values | Note |
-|---|---|---|
-| `building_left` | **Frames 13–30 = 0.000** | Left side of street opens to parks/plazas from midpoint onward. |
-| `vegetation_ratio` | **Frames 0–3 ≈ near 0** | Taksim commercial core has minimal greenery. |
-| `person_count` | **0 frames** | Zero: no frame records zero persons. Minimum = 3 (frame 23). |
-| `vehicle_count` | **Frames 17–27** (some = 0) | Pedestrian-priority zones and park sections. |
-| All other columns | **0** | Complete. |
-
-**Structural under-coding:**
-- **Temporal slice.** Dataset captures one moment in time. Rush hour (08:00–09:00) would show vastly different vehicle counts; evening (18:00–19:00) different pedestrian patterns.
-- **Left/right split.** `building_left` becomes exactly zero from frame 13 onward — this is not missing data but a genuine spatial transition (street widens, left side becomes parkland).
-- **Agent heterogeneity.** `person_count` conflates tourists (Taksim), office workers (frames 1–8), and leisure walkers (Taşkışla galleries). No temporal or behavioral classification.
+**H3: Sonification amplifies certain patterns while suppressing others.** Patterns that are visually subtle (e.g., a 10% increase in vegetation ratio) may become acoustically dominant; conversely, spatially significant features (e.g., material texture, architectural detail, social activity) that cannot be measured may produce no acoustic signal.
 
 ---
 
-## Outlier Analysis
+## Key Questions Under Investigation
 
-- **`person_count` peaks at frames 0–2.** Frames 0, 1, 2 record 15, 18, 22 respectively — the highest densities of the entire route. These are the Taksim pedestrian hub moments. Frame 2's 22 is the global maximum, reflecting peak flow at the intersection of Republic Street and the commercial thoroughfare.
-- **`vehicle_count` spike at frames 2–4.** Vehicles are concentrated in the commercial zone (0–140 m) where traffic flow is heaviest. After frame 12, vehicle counts drop to near-zero — the pedestrianized cultural district has minimal car traffic.
-- **Building mass collapse at frame 13.** From frame 13 onward, `building_left` = 0.000 and `building_ratio` drops below 0.030. This marks the entry into the Taşkışla open courtyard / park system — a sharp morphological discontinuity and the clearest sonic transition point.
-- **Inverse person-vehicle relationship.** Frames 0–10: high vehicles, moderate-to-high persons (congestion). Frames 15–30: near-zero vehicles, sustained high persons (pedestrian leisure). The route tells a story of mode transition — from automotive to pedestrian dominance.
+1. **Perceptual mapping**: Do listeners' acoustic judgments (e.g., "this section sounds denser") correlate with actual morphological values?
 
----
+2. **Route memory**: After listening to a full route, can a listener identify moments they heard before (the "park entrance" or "traffic density peak") when played in random order?
 
-## Distribution Summary & Statistical Overview
+3. **Aesthetic coherence**: Does sonification of morphological data produce musically coherent sound, or is it primarily analytical—interesting as data visualization but not as listening experience?
 
-**Numeric summary (31 frames)**
+4. **Embodied navigation**: Does sonified morphology aid or confuse navigation? Can you walk a real route while listening to its sonification without the visual field?
 
-| | lat | lon | distance (m) | building_ratio | sky_ratio | vegetation_ratio | person_count | vehicle_count |
-|---|---|---|---|---|---|---|---|---|
-| **mean** | 41.0406 | 28.9897 | 575.0 | 0.249 | 0.441 | 0.427 | 10.42 | 3.35 |
-| **std** | 0.0026 | 0.0050 | 347.7 | 0.151 | 0.252 | 0.338 | 5.23 | 3.22 |
-| **min** | 41.0365 | 28.9825 | 0.0 | 0.001 | 0.024 | 0.000 | 3 | 0 |
-| **median** | 41.0405 | 28.9898 | 575.0 | 0.233 | 0.485 | 0.501 | 9 | 2 |
-| **max** | 41.0454 | 28.9969 | 1150.0 | 0.512 | 0.745 | 0.998 | 22 | 10 |
+5. **Comparative morphology**: Do two routes with *different* morphological profiles produce *audibly different* soundscapes? Do two routes with *similar* profiles sound alike?
 
-**Plots**
-
-![Spatial distribution](spatial_distribution.png)
-![Channel distributions along route](channel_distribution.png)
-![Zone strip](zone_strip.png)
-![Ratio fields box plot](ratio_boxplot.png)
-![Agent count histograms](count_histograms.png)
-![Correlation matrix](correlation_matrix.png)
-
-**Morphological character by zone**
-
-- **Frames 0–6 (0–217.6 m) — Taksim commercial core.** Building ratio 0.44–0.51, sky ratio <0.18, vegetation near-zero. High pedestrian and vehicle counts (15–22 persons, 6–9 vehicles). The soundscape is dominated by **low-register sine oscillators (panned L/R)** evoking the street canyon, plus **sawtooth vehicle tones**. Acoustically the densest, most urban section.
-
-- **Frames 7–16 (257–613.6 m) — Transition zone (Gezi Park approach).** Building ratio declining (0.37→0.22), sky ratio rising (0.20→0.42), vegetation emerging (0.16→0.50). Pedestrian counts remain moderate (9–13), vehicles drop (1–3). The soundscape begins to **lighten**: sine tones diminish, triangle-wave vegetation tones rise.
-
-- **Frames 17–30 (653.2–1150 m) — Taşkışla cultural district.** Building ratio <0.05, sky ratio 0.44–0.75, vegetation dominant (0.54–0.99). Pedestrians sustained high (14–19), vehicles minimal (0–2). The soundscape is now **mid-to-upper register dominated** — triangle waves (sky and vegetation) with occasional percussive hits (persons). The city has become a garden.
+6. **The sonification paradox**: Information that is trivial visually (a color change, a subtle shift in building height) may be imperceptible sonically; conversely, data that is numerically small (3% vegetation) may sound significant. What gets amplified in the translation?
 
 ---
 
-## Repeated Data Analysis
+## Dataset Structure
 
-- **Fully duplicated rows:** 0.
-- **Building ratio zero pattern:** Frames 13–30 all have `building_left = 0.000`. This is not data error but reflects a single continuous spatial phenomenon (the west side of the street becomes parkland from Gezi onward). This represents a genuine urban feature — not duplication.
-- **No repeated coordinates.** All 31 `(lat, lon)` pairs are unique.
-- **Person count clustering:** High values (14–22) cluster at frames 0–2 and 28–30 (Taksim + Taşkışla gallery districts). Mid values (5–12) in the transition zone. This bimodal distribution accurately reflects usage patterns.
+**Two routes, identical frame structure:**
+- 31 frames per route
+- ~1.1–1.15 km each
+- 6 morphological channels per frame
+- Temporal alignment: ~400 ms per frame at playback speed 1x
 
----
+**Data sources:** OpenStreetMap street-level imagery + semantic segmentation (building, sky, vegetation) + object detection (persons, vehicles).
 
-## Bias Check
-
-- **Single route, single time capture.** The dataset captures one specific moment. A weekday morning rush hour would show different vehicle counts; a weekend evening would show different person counts at Taşkışla (gallery openings, social gatherings).
-- **Direction bias.** Northbound only (Taksim → Taşkışla). The return route southbound would show `building_left` and `building_right` reversed, producing a mirror-image soundscape.
-- **Pixel-area dominance.** Large nearby building façades dominate the ratio values; distant but spatially important features (the Bosphorus, the Marmara horizon) are underrepresented.
-- **Agent under-count.** Pedestrians hidden in shops, cafés, galleries are not counted. The route's actual human activity is likely 10–15% higher than recorded.
-- **Survivorship bias.** The dataset covers the main pedestrian corridor. Smaller side streets, courtyards, and interior spaces are absent — the archive over-represents the formal streetscape.
-- **Skew to watch.** Mean `person_count` (10.42) is substantially higher than the coastal route mean (~2), reflecting Taksim–Taşkışla's concentrated pedestrian use. High vehicle counts (mean 3.35) early in the route skew the overall vehicle mean upward, but these counts drop sharply after frame 12.
+**Variability:** Routes selected to represent different urban typologies—one coastal/natural, one urban/built—to test whether sonification is generic (works for any morphology) or site-specific (reveals character unique to each place).
 
 ---
 
-## Project Documentation & Reflection
+## Application & Design Rationale
 
-### Narrative
+**Single-file HTML application** with:
+- **Route selector**: choose pre-recorded route or draw custom route
+- **Playback controls**: speed (0.25x–4x), reverb depth, master volume
+- **Layer toggles**: isolate individual channels (listen to building pressure alone; listen to person-spikes alone)
+- **"What have you heard?" analysis**: after playback, view stacked area chart of all 6 channels across the route's timeline, with audio playback of each channel's characteristic tone
+- **Map display**: route shown geographically, with user's position in the soundscape overlaid
 
-Taksim is noise. Not just sound, but a kind of relentless urban intensity — traffic, crowds, commercial calls, construction, the press of a city at its densest. Walk north from Taksim Square for ten minutes and the city **changes its mind**. The streets widen, trees appear, vehicle traffic vanishes, pedestrians slow down, the architecture switches from commerce to culture. SoundScape turns this lived gradient into a listening experience: start in acoustic congestion, end in acoustic calm. The journey is only 1.15 km. The sonic distance is immense.
-
-### Key Message
-
-**The city's character is encoded in its density gradient.** Taksim–Taşkışla is not a uniform neighborhood; it is a *transition*. SoundScape reveals this transition sonically: as the listener moves through the frames, vehicle tones fade, building pressure diminishes, green textures fill the acoustic space. The route is a score of urban gentrification in reverse—not commodification, but humanization, pedestrianization, cultural reclamation.
-
-### Intended Audience
-
-**City walkers, urban planners, and cultural practitioners** in İstanbul who navigate this corridor daily but may not consciously register its transformation. The tool makes the transition **audible and memorable**. Researchers interested in soundscaping dense urban quarters will find this route exemplary: high pedestrian presence + low vegetation initially, then the reverse.
-
-### Design Decisions
-
-- **High pedestrian floors.** Unlike the Kadıköy–Moda coast (which privileges sky and vegetation), this route keeps pedestrian presence sonically salient throughout. Persons are not occasional; they are the constant.
-- **Stereo as crowd pressure.** `building_left` and `building_right` panning encodes not just spatial geometry but the sensation of being **surrounded by walls**—a deliberate choice to make the acoustic claustrophobia of Taksim palpable.
-- **Vehicle tones early, not late.** Traffic is front-loaded (frames 0–12), then disappears. This is sonically honest: the pedestrianized zone has no cars.
-- **Vegetation as relief, not nature.** The triangle-wave vegetation tones here are not "natural" in the sense of parks; they are the **greening of an urban zone**—street trees, small gardens, the city's attempt at breathing room. The tone remains cultural, not pastoral.
-
-### Critical Evaluation
-
-The Taksim–Taşkışla route succeeds in encoding a **real urban transition**. A listener who walks this route after hearing the SoundScape version will hear Gezi Park's boundary (frame 13) as a genuine acoustic threshold—the moment the city steps back.
-
-However, important limitations:
-
-1. **Temporal snapshot.** The dataset misses rush-hour vehicle symphony (08:00–09:00) and evening gallery crowds (18:00–20:00). A time-series dataset across the day would be more representative.
-
-2. **Affordance invisibility.** The dataset records what is *visible* (buildings, vegetation, agents), not what is *socially happening* (a protest, a cultural event, a strike). On any given day, this route's human dynamics could be radically different.
-
-3. **Institutional erasure.** Taşkışla is home to galleries, museums, and independent spaces. These exist as buildings in the morphology but produce no acoustic signal. Their *social significance* is unmeasurable from street-level data.
-
-### Unexpected Patterns
-
-- **Pedestrians do not follow vehicles.** Frames 0–6 have high vehicles AND high pedestrians. Frames 17–30 have zero vehicles but sustained high pedestrians. The relationship is not zero-sum; they are independent axis. People crowd Taksim on foot; they depart from it on foot. Automobiles are not the primary mode.
-
-- **Building pressure outlasts buildings.** Frame 13 marks the end of left-side buildings, yet `building_ratio` remains significant through frame 20. Right-side buildings persist; the street is still bounded. The "opening" is asymmetric—a finding with real urban implications about street hierarchy and sidewalk experience.
-
-- **Quietest moment is not the emptiest.** Frame 17 has near-zero vehicles, moderate persons (16), and emerging vegetation (0.54). Yet it is not the "quietest" frame psychoacoustically—the presence of people keeps the mid-register full. Frame 23–24 (near-zero vehicles, low persons, high vegetation) would sound more peaceful, yet they are not identified as special in the raw data. The acoustic *experience* diverges from the morphological *measurement*.
+**Design philosophy:**
+- **Dark/minimal aesthetic** (black + yellow) to reduce visual distraction — the listener should attend to sound
+- **Monospace typography** (IBM Plex Mono) to evoke a measurement/analysis tool, not a consumer app
+- **Stereo spatial encoding** (`building_left` panned hard L, `building_right` hard R) to map the street's geometry into headspace
+- **Percussive moments** (person-spikes) to punctuate the continuous oscillators, making pedestrian presence a lived/embodied signal
 
 ---
 
-## Repository Contents
+## Expected Outcomes
+
+### Affirmative Results (H1, H2, H3 supported):
+- Listeners reliably identify route character by ear
+- Transitions produce audible discontinuities
+- Sonification creates emergent patterns (e.g., "traffic peaks are harmonically dense") that weren't explicit in the input data
+
+### Negative Results (hypotheses falsified):
+- Routes sound homogeneous despite morphological difference
+- Transitions produce no perceptual shifts
+- Sonification obscures rather than clarifies spatial pattern
+
+### Nuanced Results (most likely):
+- Some morphological features (density gradients, area changes) are audibly legible
+- Others (categorical transitions, semantic shifts) produce no sonic signal
+- The sonification is *interesting* as a representation but *impoverished* compared to visual/embodied navigation
+- Sonification reveals correlations that visualization misses (e.g., person-density + vehicle-density are **not** correlated in space; sonically, they fight for auditory attention)
+
+---
+
+## Broader Implications
+
+**For urban design**: Can sonification become a tool for assessing spatial quality? Current methods are visual (photography, rendering) or embodied (walking). Sonification offers a third mode—a portable, replayable representation that abstracts away the visual but preserves morphological essence.
+
+**For sound art & composition**: Can urban morphology be understood as *pre-composed music*? The city's density gradient, traffic rhythm, and spatial rhythm already encode something like musical form. Sonification simply *plays* what is already there.
+
+**For accessibility**: Sonification could make urban spatial structure legible to blind or low-vision users in a way photography and visual maps cannot.
+
+**For data visualization**: Sonification is data visualization—it answers the same question ("what story does the data tell?") through a different sensory channel. The project tests whether that channel reveals or obscures.
+
+---
+
+## Critical Framework
+
+The project sits at the intersection of:
+- **Sonification** (representing data as sound)
+- **Geospatial analysis** (mapping urban morphology)
+- **Sound design** (coherent listening experience)
+- **Perception research** (what is audible? what is meaningful?)
+
+It is *not* primarily a music composition project, though it produces sound. It is *not* primarily a data visualization project, though it encodes data. It is a **methodological experiment**: can we parse the city by ear?
+
+---
+
+## Repository Structure
 
 ```
-dataset.pkl            Cleaned dataset (pandas DataFrame, 31 × 11)
-dataset.csv            Same dataset in CSV format
-dataDictionary.json    Per-column definitions, types, domains
-metadata.json          Provenance, scope, method, application
-requirements.txt       Python dependencies
-soundscape.html        Single-file interactive application
-README.md  This file (Taksim–Taşkışla route)
+dataset.pkl              Morphological data for pre-recorded routes
+dataset.csv              Convenience CSV copy
+dataDictionary.json      Per-column definitions
+metadata.json            Provenance, routes, synthesis mapping
+README.md                Full documentation (this file)
+soundscape.html          Single-file interactive application
 plots/
   spatial_distribution.png
   channel_distribution.png
   zone_strip.png
-  ratio_boxplot.png
-  count_histograms.png
   correlation_matrix.png
+  [etc.]
 ```
 
-### Reproducing
+**Reproducing the sonification:** The HTML file is standalone. No server, no API key, no installation required. Open in any modern browser. (Draw Mode requires internet for OSRM + Overpass API; pre-recorded routes work offline.)
 
-```bash
-pip install -r requirements.txt
-python build_dataset.py    # Taksim–Taşkışla dataset
-python make_plots.py       # Regenerate plots
-```
+**Modifying the synthesis:** Mapping rules are editable in the JavaScript section of the HTML. Change oscillator types, frequency ranges, pan positions, reverb parameters — and re-listen to the result.
 
-The application (`soundscape.html`) is fully self-contained and includes embedded ROUTE data for both Kadıköy–Moda and Taksim–Taşkışla. Switch routes in the application UI.
-
-**Author:** ılgın altun · ITU MBL549E Special Topics in Architectural Design Computing, 2026.
+**Adding new routes:** Provide 31 frames of (lat, lon, distance, building_ratio, sky_ratio, vegetation_ratio, building_left, building_right, person_count, vehicle_count) and the sonification will render immediately.
 
 ---
 
-## Comparison: Kadıköy–Moda vs. Taksim–Taşkışla
+## Author & Context
 
-| Dimension | Kadıköy–Moda | Taksim–Taşkışla |
-|-----------|---------------|-----------------|
-| Distance | 1.14 km | 1.15 km |
-| Primary character | Coastal transition | Urban commercial → cultural |
-| Building dominance | Start low, end minimal | Start high, end minimal |
-| Vegetation dominance | Start minimal, end high | Start zero, end high |
-| Person activity | Low throughout (0–12) | High throughout (3–22) |
-| Vehicle activity | Low throughout (0–12) | High start, vanish mid-route |
-| Acoustic profile | Sky & vegetation heavy | Human & vehicle heavy |
-| Sonic journey | Lightening, opening | Quieting, humanizing |
+**ılgın altun** · ITU MBL549E Special Topics in Architectural Design Computing, 2026.
+
+A final project exploring the intersection of **spatial data, urban morphology, and sound design**. The question at the heart of the project is not "what does İstanbul sound like?" but rather "what can we learn about space *by* listening to it?"
+
+---
+
+## References & Inspiration
+
+- Cage, Pauline (1969). *4'33"* — silence as composition; what we hear in the absence of intentional sound
+- Ligeti, György (1962). *Atmosphères* — textural, morphological orchestration
+- Cardew, Evan (1967). *The Great Learning* — graphic notation; the score as spatial object
+- Wishart, Trevor (1996). *Audible Design* — sonification principles
+- de Certeau, Michel (1984). *The Practice of Everyday Life* — the walk as text; spatial narrative
+- Attali, Jacques (1985). *Noise: The Political Economy of Music* — sound as a mirror of social order

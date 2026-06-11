@@ -2,7 +2,7 @@
   "title": "SoundScape — Urban Sound Architecture of Central Istanbul",
   "author": "ılgın altun",
   "course": "ITU MBL549E Special Topics in Architectural Design Computing, 2026",
-  "research_question": "How does urban density gradients—from commercial bustle to cultural quietude—manifest as sound across İstanbul's central corridors?",
+  "research_question": "Can spatial morphology be perceived and understood through sound without visual reference? What acoustic narratives emerge when six-dimensional urban morphological data is mapped to generative synthesis? What does sonification reveal about spatial transformation that visualization obscures—and what does it lose?",
   "routes": [
     {
       "name": "Kadıköy–Moda Coastline",
@@ -64,5 +64,12 @@
     "requirements.txt": "Python dependencies for reproduction",
     "README_TAKSIM_TASKISLA.md": "Full project documentation for Taksim–Taşkışla route",
     "soundscape.html": "Single-file interactive application (embeds both routes)"
-  }
+  },
+  "research_questions_specific": {
+    "encoding": "How do we map six-dimensional morphological data (building mass, sky openness, vegetation, pedestrian density, vehicle density) to a perceptually coherent and navigable soundscape?",
+    "legibility": "Can a listener track their movement through an urban sequence by ear alone, identifying key moments and zones from the acoustic signature?",
+    "revelation": "What patterns in spatial data become audible through sonification that remain hidden in numerical tables or statistical plots?",
+    "loss": "What critical information—materiality, social dynamics, phenomenological richness—cannot be captured by morphological measurement and therefore cannot be sonified?"
+  },
+  "methodology": "Two routes, one sonification engine. Identical audio synthesis rules applied to distinct urban typologies (coastal transition + commercial-to-cultural gradient) to test whether sonification reveals universal spatial patterns or is site-specific."
 }
