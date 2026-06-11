@@ -78,6 +78,15 @@ The route captures the characteristic pattern of central İstanbul: commercial d
 | **median** | 41.0405 | 28.9898 | 575.0 | 0.233 | 0.485 | 0.501 | 9 | 2 |
 | **max** | 41.0454 | 28.9969 | 1150.0 | 0.512 | 0.745 | 0.998 | 22 | 10 |
 
+**Plots**
+
+![Spatial distribution](spatial_distribution.png)
+![Channel distributions along route](channel_distribution.png)
+![Zone strip](zone_strip.png)
+![Ratio fields box plot](ratio_boxplot.png)
+![Agent count histograms](count_histograms.png)
+![Correlation matrix](correlation_matrix.png)
+
 **Morphological character by zone**
 
 - **Frames 0–6 (0–217.6 m) — Taksim commercial core.** Building ratio 0.44–0.51, sky ratio <0.18, vegetation near-zero. High pedestrian and vehicle counts (15–22 persons, 6–9 vehicles). The soundscape is dominated by **low-register sine oscillators (panned L/R)** evoking the street canyon, plus **sawtooth vehicle tones**. Acoustically the densest, most urban section.
